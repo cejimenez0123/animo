@@ -54,7 +54,7 @@ const DashboardContainer = (props)=>{
           'Observe your surroundings'
         ]
       };
-      const renderContent = () => {
+      const renderQuiz = () => {
         switch (step) {
           case 0:
             return (
@@ -162,7 +162,7 @@ const DashboardContainer = (props)=>{
         <div className="bg-white h-screen w-full overflow-x-hidden h-screem shadow-sm">
     {/* Variant 1: Focus on Current State */}
 
-      <div className="bg-gradient-to-r p-4 from-blue-500 to-blue-600 text-white">
+      <div className="bg-gradient-to-r px-4 pb-4 pt-6 from-blue-500 to-blue-600 text-white">
         {/* <div className=" items-center  "> */}
           {/* <h2 className="text-lg font-semibold">2:30 PM</h2> */}
           {/* <Settings className="w-5 h-5" /> */}
@@ -187,7 +187,7 @@ const DashboardContainer = (props)=>{
           </div>
         </div> */}
         <div className="bg-gray-50 pb-2 pt-4">
-    {renderContent()}
+    {renderQuiz()}
     </div>
         {/* Task Recommendations */}
         {/* <div className="">
