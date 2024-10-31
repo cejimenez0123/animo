@@ -1,158 +1,216 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import useSWR from "swr"
+import useCaseGetEnergyTask from "../usecase/useCaseGetEnergyTask";
+import taskApi from "../data/api/TaskApi";
+import useCaseGetModeTask from "../usecase/useCaseGetModeTask";
+import useCaseGetChildTask from "../usecase/useCaseGetChildTask";
 
-
-
-
-
+// const fetcher = (url, token) =>axios.get(url, { headers: { Authorization: "Bearer " + token } })
+//   .then((res) => res.data);
 const DashboardContainer = (props)=>{
+    const {energies,error,isLoading}=useCaseGetEnergyTask()
+    const {modes} = useCaseGetModeTask()
+   
     const [step, setStep] = useState(0);
     const [energy, setEnergy] = useState(null);
     const [mode, setMode] = useState(null);
-  
+    const {tasks,taskErr}=useCaseGetChildTask({parentTask:mode,mode:mode,energy:energy})
     const resetFlow = () => {
       setStep(0);
       setEnergy(null);
       setMode(null);
     };
-    const getCurrentMode = () => {
-        if (!energy || !mode) return null;
-        if (energy === 'low' && mode === 'relaxed') return 'low-relaxed';
-        if (energy === 'low' && mode === 'work') return 'low-work';
-        if (energy === 'high' && mode === 'relaxed') return 'high-relaxed';
-        if (energy === 'high' && mode === 'work') return 'high-work';
-        if (mode === 'nothing') return 'do-nothing';
-      };
-    const suggestions = {
-        'low-relaxed': [
-          'Take a gentle walk',
-          'Light stretching',
-          'Deep breathing exercise',
-          'Listen to calming music'
-        ],
-        'low-work': [
-          'Review your to-do list',
-          'Organize your workspace',
-          'Reply to simple emails',
-          'Do small administrative tasks'
-        ],
-        'high-relaxed': [
-          'Go for a run or workout',
-          'Practice meditation',
-          'Journal your thoughts',
-          'Work on a creative hobby'
-        ],
-        'high-work': [
-          'Tackle your most challenging task',
-          'Start a important project',
-          'Schedule strategic meetings',
-          'Learn something new'
-        ],
-        'do-nothing': [
-          'Rest mindfully',
-          'Take a power nap',
-          'Practice being present',
-          'Observe your surroundings'
-        ]
-      };
-      const renderQuiz = () => {
-        switch (step) {
-          case 0:
-            return (
-              <div className="space-y-6 text-center">
-                {/* <h2 className="text-2xl text-black font-semibold">How are you feeling?</h2> */}
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={() => {
-                      setEnergy('low');
-                      setStep(1);
-                    }}
-                    className="flex flex-col bg-white text-black border border-black  items-center gap-2 p-6"
-                    variant="outline"
+    // const getCurrentMode = () => {
+    //     if (!energy || !mode) return null;
+    //     if (energy === 'low' && mode === 'relaxed') return 'low-relaxed';
+    //     if (energy === 'low' && mode === 'work') return 'low-work';
+    //     if (energy === 'high' && mode === 'relaxed') return 'high-relaxed';
+    //     if (energy === 'high' && mode === 'work') return 'high-work';
+    //     if (mode === 'nothing') return 'do-nothing';
+    //   };
+   
+    const renderQuiz = ()=>{
+      if(isLoading){
+        return(<div className="text-black text-xl">
+          isLoading
+        </div>)
+      }
+      if(error){
+        return(<div className="text-black">
+          ERROR:{JSON.stringify(error)}</div>)
+      }
+      if(energies && energies.length>0){
+        switch(step){
+          case 0:{
+      return(<div 
+        className=""
+          // className="space-y-6 text-center"
+          >
+                  <div 
+                  className="flex justify-center gap-4"
                   >
-                    {/* <BatteryLow className="w-8 h-8" /> */}
-                    Low Energy
-                  </button>
-                  <button
-                    onClick={() => {
-                      setEnergy('high');
-                      setStep(1);
-                    }}
-                    className="flex flex-col bg-white text-black border border-black  items-center gap-2 p-6"
-                    variant="outline"
-                  >
-                    {/* <Battery className="w-8 h-8" /> */}
-                    High Energy
-                  </button>
-                </div>
-              </div>
-            );
-    
-          case 1:
-            return (
-              <div className="space-y-6 pt-4 text-center">
-                {/* <h2 className="text-2xl font-semibold text-black">What would serve you best?</h2> */}
-                <div className="flex flex-wrap justify-center gap-4">
-                  <button
-                    onClick={() => {
-                      setMode('relaxed');
-                      setStep(2);
-                    }}
-                    className="flex flex-col items-center gap-2 p-6
-                    bg-white text-black border border-black "
-                    variant="outline"
-                  >
-                    {/* <Leaf className="w-8 h-8" /> */}
-                    Relaxation
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMode('work');
-                      setStep(2);
-                    }}
-                    className="flex flex-col items-center gap-2 p-6
-                    bg-white text-black border border-black "
-                    variant="outline"
-                  >
-                    {/* <Zap className="w-8 h-8" /> */}
-                    Productivity
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMode('nothing');
-                      setStep(2);
-                    }}
-                    className="flex flex-col items-center gap-2 p-6
-                    bg-white text-black border border-black "
-                    variant="outline"
-                  >
-                    {/* <Coffee className="w-8 h-8" /> */}
-                    Do Nothing
-                  </button>
-                </div>
-              </div>
-            );
-    
-          case 2:
-            const currentMode = getCurrentMode();
-            return (
-              <div className="w-fit mx-auto ">
-                {/* <h2 className="text-2xl font-semibold text-black text-center">Suggested Activities</h2> */}
-                <div className="grid gap-2">
-                  {suggestions[currentMode].map((suggestion, index) => (
-                    <div key={index} className="bg-white/50">
-                      <div className="p-4">
-                        <p className="text-lg bg-white text-black border border-black w-64 p-2 rounded-lg">{suggestion}</p>
+                        {energies.map(task=>{
+                      
+                          return(<button
+                          onClick={() => {
+                            setEnergy(task);
+                            setStep(1);
+                          }}
+                      
+                          className="flex flex-col bg-white text-black border border-black  items-center gap-2 p-6"
+                          variant="outline">
+                            {task.name}
+                          </button>)
+                        })}
                       </div>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={resetFlow} className="w-72 bg-blue-600 mt-2">
-                  Start Over
-                </button>
-              </div>
-            );
+              </div>)
         }
-      };
+    
+    case 1:{
+    
+      return( <div className="space-y-6 pt-4 text-center">
+                 {/* <h2 className="text-2xl font-semibold text-black">What would serve you best?</h2> */}
+                   <div className="flex flex-wrap justify-center gap-4">
+                   {modes.map(mode=>{
+                  return(<button
+                      onClick={() => {
+                        setMode(mode);
+                        setStep(2);
+                      }}
+                      className="flex flex-col items-center gap-2 p-6
+                      bg-white text-black border border-black "
+                      variant="outline"
+                    >
+                      {mode.name}
+                    </button>)
+                   })
+              }
+            </div>
+          </div>)
+  }
+  case 2:{
+    console.log("DASH",tasks)
+    return( <div className="space-y-6 pt-4 text-center">
+    {/* <h2 className="text-2xl font-semibold text-black">What would serve you best?</h2> */}
+      <div className="flex flex-wrap justify-center gap-4">
+      {tasks.map(task=>{
+     return(<button
+         onClick={() => {
+          //  setMode(mode);
+          //  setStep(2);
+         }}
+         className="flex flex-col items-center gap-2 p-6
+         bg-white text-black border border-black "
+         variant="outline"
+       >
+         {task.name}
+       </button>)
+      })
+ }
+</div>
+</div>)
+  }  }
+  }
+}
+    //   const renderQuiz = () => {
+    //     switch (step) {
+    //       case 0:
+    //         return (
+    //           <div className="space-y-6 text-center">
+    //             {/* <h2 className="text-2xl text-black font-semibold">How are you feeling?</h2> */}
+    //             <div className="flex justify-center gap-4">
+    //               <button
+    //                 onClick={() => {
+    //                   setEnergy('low');
+    //                   setStep(1);
+    //                 }}
+    //                 className="flex flex-col bg-white text-black border border-black  items-center gap-2 p-6"
+    //                 variant="outline"
+    //               >
+    //                 {/* <BatteryLow className="w-8 h-8" /> */}
+    //                 Low Energy
+    //               </button>
+    //               <button
+    //                 onClick={() => {
+    //                   setEnergy('high');
+    //                   setStep(1);
+    //                 }}
+    //                 className="flex flex-col bg-white text-black border border-black  items-center gap-2 p-6"
+    //                 variant="outline"
+    //               >
+    //                 {/* <Battery className="w-8 h-8" /> */}
+    //                 High Energy
+    //               </button>
+    //             </div>
+    //           </div>
+    //         );
+    
+    //       case 1:
+    //         return (
+    //           <div className="space-y-6 pt-4 text-center">
+    //             {/* <h2 className="text-2xl font-semibold text-black">What would serve you best?</h2> */}
+    //             <div className="flex flex-wrap justify-center gap-4">
+    //               <button
+    //                 onClick={() => {
+    //                   setMode('relaxed');
+    //                   setStep(2);
+    //                 }}
+    //                 className="flex flex-col items-center gap-2 p-6
+    //                 bg-white text-black border border-black "
+    //                 variant="outline"
+    //               >
+    //                 {/* <Leaf className="w-8 h-8" /> */}
+    //                 Relaxation
+    //               </button>
+    //               <button
+    //                 onClick={() => {
+    //                   setMode('work');
+    //                   setStep(2);
+    //                 }}
+    //                 className="flex flex-col items-center gap-2 p-6
+    //                 bg-white text-black border border-black "
+    //                 variant="outline"
+    //               >
+    //                 {/* <Zap className="w-8 h-8" /> */}
+    //                 Productivity
+    //               </button>
+    //               <button
+    //                 onClick={() => {
+    //                   setMode('nothing');
+    //                   setStep(2);
+    //                 }}
+    //                 className="flex flex-col items-center gap-2 p-6
+    //                 bg-white text-black border border-black "
+    //                 variant="outline"
+    //               >
+    //                 {/* <Coffee className="w-8 h-8" /> */}
+    //                 Do Nothing
+    //               </button>
+    //             </div>
+    //           </div>
+    //         );
+    
+    //       case 2:
+    //         const currentMode = getCurrentMode();
+    //         return (
+    //           <div className="w-fit mx-auto ">
+    //             {/* <h2 className="text-2xl font-semibold text-black text-center">Suggested Activities</h2> */}
+    //             <div className="grid gap-2">
+    //               {suggestions[currentMode].map((suggestion, index) => (
+    //                 <div key={index} className="bg-white/50">
+    //                   <div className="p-4">
+    //                     <p className="text-lg bg-white text-black border border-black w-64 p-2 rounded-lg">{suggestion}</p>
+    //                   </div>
+    //                 </div>
+    //               ))}
+    //             </div>
+    //             <button onClick={resetFlow} className="w-72 bg-blue-600 mt-2">
+    //               Start Over
+    //             </button>
+    //           </div>
+    //         );
+    //     }
+    //   };
       const textBanner = [
         <h1 className="text-2xl font-medium mb-2">How's your energy?</h1>,
         <h1 className="text-2xl font-medium mb-2">What would serve you best?</h1>,
@@ -186,8 +244,12 @@ const DashboardContainer = (props)=>{
             <div className="w-3/4 h-full bg-blue-500 rounded-full" /> 
           </div>
         </div> */}
-        <div className="bg-gray-50 pb-2 pt-4">
+        <div 
+        className="bg-gray-50 pb-2 pt-4"
+        
+        >
     {renderQuiz()}
+    
     </div>
         {/* Task Recommendations */}
         {/* <div className="">

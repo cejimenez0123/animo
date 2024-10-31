@@ -7,19 +7,24 @@ import Navbar from './containers/Navbar'
 import SignInContainer from './containers/SignInContainer'
 import Paths from './core/Paths'
 import CreateAccountContainer from './containers/CreateAccountContainer'
+import Context from './context'
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [user,setUser]=useState(null)
+  
   return (
     <>
+     <Context.Provider value={{user,setUser}}>
   <div id="" className=''>
+   
     <Navbar/>
   <Routes history={history} >
     <Route path={Paths.home()} element={<DashboardContainer/>}/>
     <Route path={Paths.signin()} element={<SignInContainer/>}/>
     <Route path={Paths.signup()} element={<CreateAccountContainer/>}/>
   </Routes>
+
   </div>
+  </Context.Provider>
     </>
   )
 }
