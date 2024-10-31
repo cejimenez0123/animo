@@ -1,16 +1,19 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect, useContext } from "react";
 import useSWR from "swr"
 import useCaseGetEnergyTask from "../usecase/useCaseGetEnergyTask";
 import taskApi from "../data/api/TaskApi";
 import useCaseGetModeTask from "../usecase/useCaseGetModeTask";
 import useCaseGetChildTask from "../usecase/useCaseGetChildTask";
+import Context from "../context";
+import useCaseGetCurrentUser from "../usecase/user/useCaseGetCurrentUser";
 
 // const fetcher = (url, token) =>axios.get(url, { headers: { Authorization: "Bearer " + token } })
 //   .then((res) => res.data);
 const DashboardContainer = (props)=>{
     const {energies,error,isLoading}=useCaseGetEnergyTask()
     const {modes} = useCaseGetModeTask()
-   
+    useCaseGetCurrentUser()
+    const {user}=useContext(Context)
     const [step, setStep] = useState(0);
     const [energy, setEnergy] = useState(null);
     const [mode, setMode] = useState(null);
@@ -212,7 +215,7 @@ const DashboardContainer = (props)=>{
     //     }
     //   };
       const textBanner = [
-        <h1 className="text-2xl font-medium mb-2">How's your energy?</h1>,
+        <h1 className="text-2xl font-medium mb-2">Hi {user?user.preferredName:""}How's your energy?</h1>,
         <h1 className="text-2xl font-medium mb-2">What would serve you best?</h1>,
         <h1 className="text-2xl font-medium mb-2">Suggested Activities</h1>
       ]

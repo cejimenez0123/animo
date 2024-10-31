@@ -12,10 +12,18 @@ class UserApi{
         })
         return res.data
     }
+    async getUser(){
+        let res = await axios.get(this.url+"/user/",{
+            headers:{
+                Authorization:"Bearer "+localStorage.getItem(this.token)
+            }
+        })
+        return res.data
+    }
     async userUpdate({preferredName,relationshipStatus,sedentaryLevel,workStatus,dob}){
-        let res = await axios.put(this.url+"/user",{data:{
+        let res = await axios.put(this.url+"/user/",{
             preferredName,relationshipStatus,sedentaryLevel,workStatus,dob
-        }},{headers:{Authorization:"Bearer "+localStorage.getItem(this.token)
+        },{headers:{Authorization:"Bearer "+localStorage.getItem(this.token)
         }})
         return res.data
     }

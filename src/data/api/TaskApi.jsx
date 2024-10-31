@@ -11,12 +11,10 @@ class TaskApi{
     }
     async getModeTask(){
         let res = await axios.get(this.url+"/task/mode")
-        console.log(res)
         return res.data
     }
     async getPublicChildTasks({parentId}){
         let res = await axios.get(this.url+"/task/"+parentId+"/energy/"+eng+"/mode/"+mode+"/")
-        console.log(res)
         return res.data
     }
     async getProtectChildTasks({parentId,mode,energy}){
