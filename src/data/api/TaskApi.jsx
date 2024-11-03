@@ -13,17 +13,28 @@ class TaskApi{
         let res = await axios.get(this.url+"/task/mode")
         return res.data
     }
-    async getPublicChildTasks({parentId}){
-        let res = await axios.get(this.url+"/task/"+parentId+"/energy/"+eng+"/mode/"+mode+"/")
+    async getPublicChildTasks({parentId,energy,mode}){
+        let eng = "low"
+        let m = "relax"
+        if(energy.name.toLowerCase().includes("high")){
+            eng="high"
+        }
+        if(mode.name.toLowerCase().includes("work")){
+            m = "work"
+        }
+            energy.name=="Low Energy"
+    
+        let res = await axios.get(this.url+"/task"+"/"+parentId+"/energy/"+eng+"/mode/"+m+"/public")
+        console.log(res)
         return res.data
     }
     async getProtectChildTasks({parentId,mode,energy}){
         let eng = "low"
         let m = "relax"
-        if(energy.name=="High Energy"){
+        if(energy.name.toLowerCase().includes("high")){
             eng="high"
         }
-        if(m.name=="Work"){
+        if(mode.name.toLowerCase().includes("work")){
             m = "work"
         }
             energy.name=="Low Energy"
@@ -33,9 +44,22 @@ class TaskApi{
                 "Authorization":"Bearer "+localStorage.getItem("token"),
             }
         })
+        console.log("SSF",res)
         return res.data
     }
-    async postTask({name,description,parent}){
+    async postTask({name,
+                    description,
+                    parent,
+                    link,
+                    parentId,
+                    priority,
+                    complexity,
+                    startTime,
+                    endTime,
+                    dueDate,
+                    isLowFocus,
+                    isWork,
+                    }){
         let res = await axios.post(this.url+"/task/",{
             headers:{
                 Authorization:"Bearer "+localStorage.getItem("token")
@@ -43,9 +67,19 @@ class TaskApi{
             data:{
                 name,
                 description,
+                link,
+                parentId,
+                priority,
+                complexity,
+                startTime,
+                endTime,
+                dueDate,
+                isLowFocus,
+                isWork,
                 parentId:parent.id
             }
         })
+       
         return res.data
     }
 }

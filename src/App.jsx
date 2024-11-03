@@ -10,10 +10,10 @@ import CreateAccountContainer from './containers/CreateAccountContainer'
 import Context from './context'
 function App() {
   const [user,setUser]=useState(null)
-  
+  const [mode,setMode]=useState(null)
   return (
     <>
-     <Context.Provider value={{user,setUser}}>
+     <Context.Provider value={{user,setUser,setMode,mode}}>
   <div id="" className=''>
    
     <Navbar/>

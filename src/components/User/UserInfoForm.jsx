@@ -27,7 +27,7 @@ export default function UserInfoForm (){
         setDob(e.target.value)
     }
     const updateUserInfo=()=>{
-        UserApi.userUpdate({preferredName,relationshipStatus,sedentaryLevel,workStatus:employment,sedentaryLevel,dob})
+        UserApi.userUpdate({preferredName:preferredName,relationshipStatus,sedentaryLevel,workStatus:employment,sedentaryLevel,dob})
         .then(data=>{
             setUser(data.user)
             navigate(Paths.home())
@@ -57,7 +57,7 @@ export default function UserInfoForm (){
   <option>full time work</option>
   <option>part time work</option>
   <option>retired</option>
-  <option>selfemployed</option>
+  <option>self employed</option>
   </select>
   <select value={relationshipStatus} onChange={handleChangeRelationship}className="select select-ghost text-black mt-4 w-full border border-slate-100 ">
   <option disabled selected>Relationship Status</option>

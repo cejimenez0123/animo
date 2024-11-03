@@ -7,10 +7,9 @@ export default function useCaseGetModeTask(){
     let [isLoading,setIsLoading]=useState(true)
     useEffect(()=>{
       taskApi.getModeTask().then(data=>{
-        const {tasks}= data
-       
+        const {tasks}= data  
         setModes(tasks)
-      
+        setError(null)
         setIsLoading(false)
       }).catch(err=>{
      

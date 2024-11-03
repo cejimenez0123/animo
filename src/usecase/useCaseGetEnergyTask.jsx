@@ -10,6 +10,7 @@ export default function useCaseGetEnergyTask(){
         const {tasks}= data
         setEnergies(tasks)
         setIsLoading(false)
+        setError(null)
       }).catch(err=>{
      
         setError(err)

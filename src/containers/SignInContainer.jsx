@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import Paths from "../core/Paths"
+import LogInForm from "../components/User/LoginForm"
 
 
 export default function SignInContainer(props){
@@ -10,7 +11,8 @@ export default function SignInContainer(props){
     }
 
     return(<div className="bg-white h-screen text-center">
-        <div className="pt-8">
+      <LogInForm/>
+        {/* <div className="pt-8">
             <h2 className="mx-auto text-4xl w-fit mb-8 text-black">Sign In</h2>
         <label className="input input-bordered flex bg-white mx-2  items-center gap-2">
   <svg
@@ -38,8 +40,8 @@ export default function SignInContainer(props){
 </label>
 <button className="mx-auto mt-8 mb-8 text-2xl w-72">
     Log In
-</button>
+</button> */}
 <p onClick={toCreateAccount} className="w-fit text-black mx-auto">Create Account?</p>
-        </div>
+        {/* </div> */}
     </div>)
 }

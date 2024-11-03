@@ -1,14 +1,22 @@
 import { useNavigate } from "react-router-dom"
 import Paths from "../core/Paths"
+import { useContext } from "react"
+import context from "../context"
 
 
 
 
 export default function Navbar(props){
     const navigate = useNavigate()  
+    const {user,setUser}=useContext(context)
     const toSignIn = ()=>{
         navigate(Paths.signin())
     }
+    const logOut = ()=>{
+      localStorage.clear()
+      setUser(null)
+    }
+
     return(<div className="navbar bg-base-100">
     <div className="navbar-start">
       <div className="dropdown">
@@ -31,7 +39,7 @@ export default function Navbar(props){
           className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
           <li><a>Home</a></li>
           <li><a>Portfolio</a></li>
-          <li onClick={toSignIn}><a>Sign In</a></li>
+          {user?<li onClick={logOut}><a>Log Out</a></li>:<li onClick={toSignIn}><a>Sign In</a></li>}
         </ul>
       </div>
     </div>
