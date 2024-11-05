@@ -11,9 +11,13 @@ export default function LogInForm ({takeAStep}){
     const [error,setError]=useState(false)
     const {user,setUser}=useContext(Context)
     const handleChangeEmail = (e)=>{
+      setError(false)
         setEmail(e.target.value)
       }
-  
+      const handleChangePassword = (e)=>{
+        setError(false)
+          setPassword(e.target.value)
+        }
     
     const logIn=()=>{
         UserApi.logIn({email,password}).then(data=>{
@@ -45,7 +49,7 @@ Email
   Password
  
   <input 
-      onChange={(e)=>setPassword(e.target.value)}
+      onChange={(e)=>handleChangePassword(e)}
       type="password"
       className={`grow text-black py-2`+error?"input-error":""
     }

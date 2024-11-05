@@ -4,7 +4,7 @@ import axios from "axios"
 class TaskApi{
 
     url=Enviroment.path
-
+    token = "token"
     async getEnergyTask(){
         let res = await axios.get(this.url+"/task/energy")
         return res.data
@@ -27,6 +27,24 @@ class TaskApi{
         let res = await axios.get(this.url+"/task"+"/"+parentId+"/energy/"+eng+"/mode/"+m+"/public")
         console.log(res)
         return res.data
+    }
+    async getChildrenTasks({parentId}){
+        let token =localStorage.getItem("token")
+        try{
+            if(token){
+        let res = await axios.get(this.url+"/task/"+parentId+"/children",{
+            headers:{
+                "Authorization":"Bearer "+token
+            }
+        })
+        console.log(res)
+        return res.data
+    }else{
+        throw new Error("No token")
+    }
+    }catch(e){
+        return e
+    }
     }
     async getProtectChildTasks({parentId,mode,energy}){
         let eng = "low"
@@ -60,27 +78,90 @@ class TaskApi{
                     isLowFocus,
                     isWork,
                     }){
+
+                        try{
+        let token = localStorage.getItem(this.token)
+      if(token){
+        let id = parent?parent.id:null
         let res = await axios.post(this.url+"/task/",{
-            headers:{
-                Authorization:"Bearer "+localStorage.getItem("token")
-            },
-            data:{
-                name,
-                description,
-                link,
-                parentId,
-                priority,
-                complexity,
-                startTime,
-                endTime,
-                dueDate,
-                isLowFocus,
-                isWork,
-                parentId:parent.id
-            }
-        })
+            name,
+            description,
+            link,
+            parentId,
+            priority,
+            complexity,
+            startTime,
+            endTime,
+            dueDate,
+            isLowFocus,
+            isWork,
+            parentId:id
+        }, {
+    headers:{
+        "Authorization":"Bearer "+token,
+    },
+})
+
+return res.data
+      }else{
+        throw new Error("No Token")
+      }
+  
+}catch(e){
+
+    return e
+}
        
+     
+    }
+    async postBreakdown({id}){
+        let token = localStorage.getItem(this.token)
+        try{
+            if(token){
+                let res =await axios.post(this.url+"/task/"+id+"/breakdown",{},
+                {headers:{Authorization:
+                    "Bearer "+token
+                }})
+console.log(res)
+                return res.data
+            }else{
+                throw new Error("No Token")
+            }
+        }catch(e){
+            return e
+        }
+    }
+    async getTaskProtected({id}){
+        let token = localStorage.getItem(this.token)
+        try{
+            if(token){
+        let res =await axios.get(this.url+"/task/"+id+"/protected",
+        {headers:{Authorization:
+            "Bearer "+token
+        }})
         return res.data
+    }else{
+        throw new Error("No Token")
+    }
+    }catch(e){
+        return e
+    }
+    }
+    async getTaskPublic({id}){
+        let res =await axios.get(this.url+"/task/"+id+"/public")
+        return res.data
+    }
+    async getSchedule(){
+        let token =localStorage.getItem(this.token)
+        if(token!=null){
+        let res =await axios.get(this.url+"/user/task/schedule",{headers:{Authorization:
+            "Bearer "+token
+        }})
+    
+        return res.data
+    }else{
+        throw new Error("No Token")
+    }
     }
 }
 export default new TaskApi()

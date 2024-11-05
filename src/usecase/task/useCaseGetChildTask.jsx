@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import taskApi from "../data/api/TaskApi";
+import taskApi from "../../data/api/TaskApi";
 
 
 
 
-export default function useCaseGetChildTask({parentTask,energy,mode}){
+export default function useCaseGetChildTasks({parentTask,energy,mode}){
     const [tasks,setTasks]=useState([])
     const [taskErr,setTaskErr]=useState(null)
     const [taskIsLoading,setTaskIsLoading]=useState(true)
@@ -17,8 +17,7 @@ export default function useCaseGetChildTask({parentTask,energy,mode}){
           taskApi.getProtectChildTasks({parentId:parentTask.id,mode,energy}).then(data=>{
               const {tasks}=data
             
-              console.log("task",tasks)
-              console.log("BOP")
+          
               setTasks(tasks)
               setTaskErr(null)
               setTaskIsLoading(false)

@@ -1,10 +1,13 @@
 import { useContext, useState } from "react"
 import TaskApi from "../../data/api/TaskApi"
 import context from "../../context"
+import { useNavigate } from "react-router-dom"
+import Paths from "../../core/Paths"
 
 
 
 export default function CreateTaskDialog(props){
+    const navigate = useNavigate()
     const {mode}=useContext(context)
     const [name,setName]=useState("")
     const [isWork,setIsWork]=useState(false)
@@ -28,7 +31,8 @@ export default function CreateTaskDialog(props){
             isLowFocus:isLow,
             isWork:isWork,
             }).then(data=>{
-                alert("GO Do it")
+              console.log(data)
+                navigate(Paths.task.createRoute(data.task.id))
             }).catch(e=>{
                 alert(e.message)
             })
@@ -79,7 +83,7 @@ export default function CreateTaskDialog(props){
     <div className="flex pl-4 justify-around flex-row h-12 flex-start " >
     <span className="label-text mr-2 text-xl my-auto h-fit">Relax</span>
     <input type="radio" 
-    checked={isWork=== false} onChange={(e) => setIsWork(false)}name="radio-work" className="radio my-auto mr-8 checked:bg-green-500" defaultChecked />
+    checked={isWork=== false} onChange={(e) => setIsWork(false)}name="radio-work" className="radio my-auto mr-8 checked:bg-green-500"  />
    
     <span className="label-text my-auto mr-2 text-xl">Work</span>
     <input checked={isWork === true} 

@@ -1,4 +1,4 @@
-import taskApi from "../data/api/TaskApi";
+import taskApi from "../../data/api/TaskApi";
 import { useEffect, useState } from "react";
 
 export default function useCaseGetEnergyTask(){

@@ -1,22 +1,26 @@
 import { useState,useEffect, useContext } from "react";
-import useCaseGetEnergyTask from "../usecase/useCaseGetEnergyTask";
-import taskApi from "../data/api/TaskApi";
-import useCaseGetModeTask from "../usecase/useCaseGetModeTask";
-import useCaseGetChildTask from "../usecase/useCaseGetChildTask";
+import useCaseGetEnergyTask from "../usecase/task/useCaseGetEnergyTask";
+import useCaseGetModeTask from "../usecase/task/useCaseGetModeTask";
+import useCaseGetChildTask from "../usecase/task/useCaseGetChildTask";
 import Context from "../context";
 import addIcon from "../images/icons/add.png"
 import useCaseGetCurrentUser from "../usecase/user/useCaseGetCurrentUser";
 import CreateTaskDialog from "../components/Task/CreateTaskDialog";
+import ShortTermSchedule from "../components/Task/ShortTermSchedule";
+import { useNavigate } from "react-router-dom";
+import Paths from "../core/Paths";
+import dateRange from "../images/icons/date_range.svg"
+import taskIcon from "../images/icons/task.svg"
 // const fetcher = (url, token) =>axios.get(url, { headers: { Authorization: "Bearer " + token } })
 //   .then((res) => res.data);
 const DashboardContainer = (props)=>{
+  const navigate = useNavigate()
   const {user,mode,setMode}=useContext(Context)
   const [step, setStep] = useState(0);
   const [energy, setEnergy] = useState(null);
   const {energies,error,isLoading}=useCaseGetEnergyTask()
   const {modes} = useCaseGetModeTask()
   const {tasks,taskErr}=useCaseGetChildTask({parentTask:mode,mode:mode,energy:energy})
-  const {userErr,userIsLoading}=useCaseGetCurrentUser()
 
     const resetFlow = () => {
       setStep(0);
@@ -97,7 +101,7 @@ const DashboardContainer = (props)=>{
       {tasks.map(task=>{
      return(<button
      key={task.name}
-    
+          onClick={()=>navigate(Paths.task.createRoute(task.id))}
          className="flex flex-col items-center gap-2 p-6
          bg-white text-black border border-black "
          variant="outline"
@@ -133,7 +137,10 @@ const DashboardContainer = (props)=>{
         
         >
     {renderQuiz()}
-    
+    <div className="w-fit mt-8 mx-auto">
+      <button className="bg-white  mr-4"><div ><img className="w-12 h-12 mx-auto" src={taskIcon}/><p>Tasks</p></div></button>
+      <button className="bg-white ml-4"><div><img className="w-12 h-12 mx-auto" src={dateRange}/><p>Calendar</p></div></button>
+    </div>
     </div>
      
      <div className="max-w-md mx-auto w-full bg-white rounded-xl shadow-sm overflow-hidden">
@@ -151,7 +158,8 @@ const DashboardContainer = (props)=>{
         </div>
   
         {/* Timeline */}
-        <div className="space-y-4 px-2">
+        <ShortTermSchedule/>
+        {/* <div className="space-y-4 px-2">
           <div className="flex items-center gap-3 text-sm">
             <div className="w-16 text-gray-500">Now</div>
             <div className="flex-1 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
@@ -173,7 +181,7 @@ const DashboardContainer = (props)=>{
               <p className="text-gray-600 text-sm">Weekly sync</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
       
    
