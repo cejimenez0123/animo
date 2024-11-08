@@ -28,6 +28,14 @@ class TaskApi{
         console.log(res)
         return res.data
     }
+    async getFlow(){
+        let token = localStorage.getItem(this.token)
+        let res = await axios.get(this.url+"/task/flow",{headers:{
+            Authorization:"Bearer "+token
+        }})
+        console.log(res)
+        return res.data
+    }
     async getChildrenTasks({parentId}){
         let token =localStorage.getItem("token")
         try{

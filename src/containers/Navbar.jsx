@@ -2,19 +2,20 @@ import { useNavigate } from "react-router-dom"
 import Paths from "../core/Paths"
 import { useContext } from "react"
 import context from "../context"
+import { useSelector } from "react-redux"
 
 
 
 
 export default function Navbar(props){
     const navigate = useNavigate()  
-    const {user,setUser}=useContext(context)
+    const user = useSelector(state=>state.user.user)
     const toSignIn = ()=>{
         navigate(Paths.signin())
     }
     const logOut = ()=>{
       localStorage.clear()
-      setUser(null)
+    
     }
 
     return(<div className="navbar bg-base-100">

@@ -4,20 +4,24 @@ import useCaseGetModeTask from "../usecase/task/useCaseGetModeTask";
 import useCaseGetChildTask from "../usecase/task/useCaseGetChildTask";
 import Context from "../context";
 import addIcon from "../images/icons/add.png"
-import useCaseGetCurrentUser from "../usecase/user/useCaseGetCurrentUser";
 import CreateTaskDialog from "../components/Task/CreateTaskDialog";
 import ShortTermSchedule from "../components/Task/ShortTermSchedule";
 import { useNavigate } from "react-router-dom";
 import Paths from "../core/Paths";
 import dateRange from "../images/icons/date_range.svg"
 import taskIcon from "../images/icons/task.svg"
+import communityIcon from "../images/icons/community.svg"
+import { useSelector } from "react-redux";
+
 // const fetcher = (url, token) =>axios.get(url, { headers: { Authorization: "Bearer " + token } })
 //   .then((res) => res.data);
 const DashboardContainer = (props)=>{
   const navigate = useNavigate()
-  const {user,mode,setMode}=useContext(Context)
+  const {mode,setMode}=useContext(Context)
+  const user = useSelector(state=>state.user.user)
   const [step, setStep] = useState(0);
   const [energy, setEnergy] = useState(null);
+
   const {energies,error,isLoading}=useCaseGetEnergyTask()
   const {modes} = useCaseGetModeTask()
   const {tasks,taskErr}=useCaseGetChildTask({parentTask:mode,mode:mode,energy:energy})
@@ -138,27 +142,24 @@ const DashboardContainer = (props)=>{
         >
     {renderQuiz()}
     <div className="w-fit mt-8 mx-auto">
-      <button className="bg-white  mr-4"><div ><img className="w-12 h-12 mx-auto" src={taskIcon}/><p>Tasks</p></div></button>
-      <button className="bg-white ml-4"><div><img className="w-12 h-12 mx-auto" src={dateRange}/><p>Calendar</p></div></button>
+      <button className="bg-white min-w-16 mr-4"><div ><img className=" h-10 w-10 mx-auto" src={taskIcon}/><p>Tasks</p></div></button>
+      <button className="bg-white min-w-16 ml-4"><div><img className=" h-10 w-10 mx-auto" src={dateRange}/><p>Calendar</p></div></button>
+      <button className="bg-white min-w-16 ml-4"><div><img className=" h-10 w-10  mx-auto" src={communityIcon}/><p>Community</p></div></button>
+     
     </div>
     </div>
      
      <div className="max-w-md mx-auto w-full bg-white rounded-xl shadow-sm overflow-hidden">
-   <div className="p-4">
-       <div className="flex items-center justify-between mb-6">
-         <div>
-            <h1 className="text-xl font-semibold">Your Flow</h1>
-            <p className="text-gray-600">Thursday, Oct 24</p>
-          </div>
-          <div className="flex items-center gap-2">
-       {/* <Heart className="w-5 h-5 text-red-500" /> */}
-           <span className="text-sm font-medium">Feeling Focused</span>
-           </div> 
-        </div>
-        </div>
-  
+
+      
+      
         {/* Timeline */}
         <ShortTermSchedule/>
+        <div>
+          Short Term 
+          Medium Term
+          Long Term goals
+        </div>
         {/* <div className="space-y-4 px-2">
           <div className="flex items-center gap-3 text-sm">
             <div className="w-16 text-gray-500">Now</div>

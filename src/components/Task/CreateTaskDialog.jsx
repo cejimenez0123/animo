@@ -137,15 +137,14 @@ export default function CreateTaskDialog(props){
             }  {isWork? <label className="text-xl">
                 
                <div className="mb-2">Priority</div>
-            <input type="range" min={0} max="4" value={priority}
+            <input type="range" min={0} max="2" value={priority}
                 onChange={e=>setPriority(e.target.value)}
              className="range range-success" step="1" />
 <div className="flex w-full justify-between px-2 text-xs">
   <span>|</span>
   <span>|</span>
   <span>|</span>
-  <span>|</span>
-  <span>|</span>
+  
 </div>
             </label>:null}
             <label className="text-xl">

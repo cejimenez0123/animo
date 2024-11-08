@@ -107,15 +107,19 @@ setChildTask(children)
    {isWork? <label className="text-xl">
                 
                <div className="mb-2">Priority</div>
-            <input type="range" min={0} max="4" value={priority}
+            <input type="range" min={0} max="2" value={priority}
                 onChange={e=>setPriority(e.target.value)}
              className="range range-success" step="1" />
 <div className="flex w-full justify-between px-2 text-xs">
+  <span className="text-center">|
+    <p>Low Priority</p>
+  </span>
   <span>|</span>
-  <span>|</span>
-  <span>|</span>
-  <span>|</span>
-  <span>|</span>
+  <span className="text-center">|
+    <p>High Priority</p>
+  </span>
+  
+ 
 </div>
             </label>:null}
             {task.user!=null && task.user.id == user.id?<label className="text-xl">
@@ -133,7 +137,7 @@ setChildTask(children)
   <span>|</span>
 </div>
             </label>:<label className="text-xl">
-            <div className="mb-2 flex-row flex">Complexity <p className="ml-8">{stars()}</p>
+            <div className="mb-8 flex-row flex">Complexity <p className="ml-8">{stars()}</p>
         </div>
             
             </label>}
@@ -141,15 +145,16 @@ setChildTask(children)
         
     
       </div>
-      <div className="w-fit mx-auto">
+      <div className="w-fit  mx-auto">
       {task?
-      <div>
-        <button className="w-full ">
-            <img src={deleteIcon}/>
+      <div className="flex h-20   flex-row">
+        <button className="w-16 my-auto h-16 mr-8">
+            <img    className={"mx-auto"}
+                    src={deleteIcon}/>
         </button>
       <button 
             onClick={breakdownTask}
-            className="     mt-8 
+            className="    
                             bg-blue-500 
                             text-white 
                             text-2xl ">Breakdown Task</button>

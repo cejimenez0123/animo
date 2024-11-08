@@ -12,29 +12,23 @@ import CreateAccountContainer from './containers/CreateAccountContainer'
 import TaskContainer from './containers/TaskContainer'
 import Context from './context'
 import useCaseGetCurrentUser from './usecase/user/useCaseGetCurrentUser'
+import { useDispatch, useSelector } from 'react-redux'
+import getCurrentUser from './actions/user/getCurrentUser'
 function App() {
-  const [user,setUser]=useState(null)
+  const user = useSelector(state=>state.user.user)
+  const dispatch = useDispatch()
   const [mode,setMode]=useState(null)
   useEffect(()=>{
     let token = localStorage.getItem("token")
-console.log(token)
-    if(token!=null){
-    UserApi.getUser().then(data=>{
-        setUser(data.user)
-     
-        console.log("Logged in")
-        
-    }).catch(err=>{
-      console.log("logged out")
-        setUser(null)
-   
-    })
-  }
+    if(token){
+    dispatch(getCurrentUser())
+
+    }
 },[])
 
   return (
     <>
-     <Context.Provider value={{user,setUser,setMode,mode}}>
+     <Context.Provider value={{user,setMode,mode}}>
   <div id="" className=''>
    
     <Navbar/>
