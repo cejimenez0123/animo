@@ -25,23 +25,17 @@ export default function RegisterForm ({takeAStep}){
       useEffect(() => {
 
         window.onGoogleSuccess = (response) => {
-          console.log("res",JSON.stringify(response))
-          
-          // console.log("cred",JSON.stringify(response.credential))
-          localStorage.setItem("google_client_id",response.clientId)
-          localStorage.setItem("google_id",response.credential)
-         UserApi.getAccessToken(response.credential).then(token=>
+      
+         UserApi.registerGoogle(response).then(token=>
           
           {
-            localStorage.setItem("google_token",token)
-            dispatch(getGoogleUser({credentialId:response.credential}))})
-         
           
-          // hit your backend, passing up response.credential
-        }
-    
+        })
+      }
         // Inject the google provided script 
         // (an importable module would be nicer here)
+    
+      
         const script = document.createElement('script');
         script.src = "https://accounts.google.com/gsi/client";
         script.async = true;
@@ -51,6 +45,7 @@ export default function RegisterForm ({takeAStep}){
           // clean up for react lifecycle
           window.onGoogleSuccess = undefined;
           document.body.removeChild(script)
+        
         }
       }, []);
 
@@ -115,24 +110,22 @@ export default function RegisterForm ({takeAStep}){
   Sign Up
   </button>
   <div id="g_id_onload"
-        data-client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-        data-callback="onGoogleSuccess" // as defined above
-        data-context="signin"
-        data-ux_mode="popup"
-        data-auto_prompt="false">
-      </div>
+     data-client_id="663793072998-3t6v9v7bbner6grb9rkal1hltkhu8k6h.apps.googleusercontent.com"
+     data-context="signin"
+     data-ux_mode="popup"
+     data-callback="onGoogleSuccess"
+     data-nonce=""
+     data-itp_support="true">
+</div>
 
-      <div className="g_id_signin"
-        data-type="standard"
-        data-shape="rectangular"
-        data-theme="filled_blue"
-        data-text="signin_with"
-        data-size="large"
-        data-logo_alignment="left">
-      </div>
-  {/* <div class="px-6 sm:px-0 max-w-sm">
-    <button onClick={googleSignUp}type="button" class="text-white  w-full  bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2"><svg class="mr-2 -ml-1 w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path></svg>Sign up with Google<div></div></button>
-</div> */}
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="pill"
+     data-theme="filled_blue"
+     data-text="signup_with"
+     data-size="large"
+     data-logo_alignment="left"/>
+
 </div>
   </div>
    )

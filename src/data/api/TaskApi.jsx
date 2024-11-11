@@ -45,7 +45,7 @@ class TaskApi{
                 "Authorization":"Bearer "+token
             }
         })
-        console.log(res)
+      
         return res.data
     }else{
         throw new Error("No token")
@@ -70,7 +70,7 @@ class TaskApi{
                 "Authorization":"Bearer "+localStorage.getItem("token"),
             }
         })
-        console.log("SSF",res)
+     
         return res.data
     }
     async postTask({name,
@@ -90,12 +90,15 @@ class TaskApi{
                         try{
         let token = localStorage.getItem(this.token)
       if(token){
-        let id = parent?parent.id:null
+        let id = null
+        if(parent.id){
+            id=parent.id
+        }
+      
         let res = await axios.post(this.url+"/task/",{
             name,
             description,
-            link,
-            parentId,
+            link, 
             priority,
             complexity,
             startTime,

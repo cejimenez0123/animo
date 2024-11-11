@@ -11,7 +11,7 @@ import Paths from './core/Paths'
 import CreateAccountContainer from './containers/CreateAccountContainer'
 import TaskContainer from './containers/TaskContainer'
 import Context from './context'
-import useCaseGetCurrentUser from './usecase/user/useCaseGetCurrentUser'
+
 import { useDispatch, useSelector } from 'react-redux'
 import getCurrentUser from './actions/user/getCurrentUser'
 function App() {

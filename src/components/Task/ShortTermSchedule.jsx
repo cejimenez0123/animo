@@ -13,7 +13,7 @@ function ShortTermSchedule (props){
   const isLoading = useSelector(state=>state.task.loading)
   const err = useSelector(state=>state.task.error)
   const user = useSelector(state=>state.user.user)
-  console.log("Scheudle",flowTasks)
+ 
     useEffect(()=>{
       if(flowTasks && flowTasks.length==0){
         dispatch(getFlow())
@@ -73,7 +73,7 @@ function ShortTermSchedule (props){
         </div>
      <div className="space-y-4 px-2">
       <div className="min-h-24">
-      {flowTasks.map(task=>{
+      {flowTasks?flowTasks.map(task=>{
   return(<div>
            <div className="flex gap-3 text-sm">
               <div className="flex flex-col item-center h-fit">
@@ -87,7 +87,10 @@ function ShortTermSchedule (props){
   </div>
 </div>
 
-      </div>)})}
+      </div>)}):<div className="flex-1 p-3 bg-gray-50 rounded-lg">
+    <h3 className="font-medium"></h3>
+    {/* <p className="text-gray-600 text-sm">Weekly sync</p> */}
+  </div>}
         </div>
         </div>
           {/* <div className="flex items-center gap-3 text-sm">

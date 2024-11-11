@@ -53,25 +53,47 @@ class UserApi{
           .replace(/\//g, '_')
           .replace(/=+$/, '');
       }
-    async getAccessToken(credentialId) {
-        let res = await axios.get(this.url+"/user/google/token/"+credentialId)
-
-    
-        console.log(res.data)
+      async loginGoogle(creds){
+        let res = await axios.post(this.url+"/user/auth/google",{creds:creds})
+    return res.data
+      }
+      async registerGoogle(creds){
+        let res = await axios.post(this.url+"/user/register/google",{
+            creds:creds
+        })
+        console.log(res)
         return res.data
       }
-
-   async googleGetUser(){
-            const token = localStorage.getItem(this.googleToken)
-            const peopleApiEndpoint = 'https://people.googleapis.com/v1/people/me';
-            const config = {
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              }
-            };
-            const response = await axios.get(peopleApiEndpoint, config);
-            return response.data;
+    async getAccessToken(token) {
+        let res = await axios.post(this.url+"/user/auth/google",{creds:token})
+    return res.data
         }
+        //   .then(response => response.json())
+        //   .then(data => {
+        //     // Handle the response from the server, e.g.,   
+        //  display user information
+        //   })
+        //   .catch(error => {
+        //     console.error('Error sending ID token:', error);
+        //   });
+        // let res = await axios.get(this.url+"/user/google/token/"+credentialId)
+
+    
+        // console.log(res.data)
+        // return res.data
+      
+
+//    async googleGetUser(){
+//             const token = localStorage.getItem(this.googleToken)
+//             const peopleApiEndpoint = 'https://people.googleapis.com/v1/people/me';
+//             const config = {
+//               headers: {
+//                 Authorization: `Bearer ${accessToken}`
+//               }
+//             };
+//             const response = await axios.get(peopleApiEndpoint, config);
+//             return response.data;
+//         }
 
 
       

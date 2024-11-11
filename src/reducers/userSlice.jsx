@@ -31,7 +31,9 @@ const userSlice = createSlice({
             state.loading = false
             state.error= null
         }).addCase(getCurrentUser.rejected,(state,{payload})=>{
+           if(payload.error){
             state.error = payload.error
+           }
         })
 
 }})

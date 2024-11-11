@@ -1,4 +1,4 @@
-import { useState,useContext } from "react"
+import { useState,useContext,useEffect } from "react"
 import Context from "../../context"
 import UserApi from "../../data/api/UserApi"
 import { useNavigate } from "react-router"
@@ -18,7 +18,44 @@ export default function LogInForm ({takeAStep}){
         setError(false)
           setPassword(e.target.value)
         }
-    
+        useEffect(() => {
+
+          window.onGoogleSuccess = (response) => {
+              // localStorage.setItem("creds",JSON.stringify(response))
+              // UserApi.getAccessToken(response).then(res=>{
+              //   console.log(res)
+              // })
+              UserApi.loginGoogle(response).then(res=>{
+                console.log(res)
+              })
+        
+          }
+            // const idToken = 
+          //   console.log("idToken",JSON.stringify(response))
+          //   // localStorage.setItem("google_client_id",response.clientId)
+          //   // localStorage.setItem("google_id",response.credential)
+          //  UserApi.getAccessToken(response).then(token=>
+            
+          //   {
+            
+          // })
+        
+          // Inject the google provided script 
+          // (an importable module would be nicer here)
+      
+        
+          const script = document.createElement('script');
+          script.src = "https://accounts.google.com/gsi/client";
+          script.async = true;
+          document.body.appendChild(script);
+      
+          return () => {
+            // clean up for react lifecycle
+            window.onGoogleSuccess = undefined;
+            document.body.removeChild(script)
+          
+          }
+        }, []);
     const logIn=()=>{
         UserApi.logIn({email,password}).then(data=>{
           const {token,user}=data
@@ -69,6 +106,24 @@ Email
   <button onClick={logIn} className="mx-auto mt-8 mb-8 text-2xl w-72">
   Log In
   </button>
+  <div id="g_id_onload"
+     data-client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+     data-context="signin"
+     data-ux_mode="popup"
+     data-callback="onGoogleSuccess"
+     data-nonce="true"
+     data-auto_select="true"
+     data-itp_support="true">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="pill"
+     data-theme="filled_blue"
+     data-text="signin_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
   </div>
    )
   }

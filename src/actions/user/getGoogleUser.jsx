@@ -2,10 +2,10 @@ import UserApi from "../../data/api/UserApi"
 import { createAsyncThunk } from "@reduxjs/toolkit"
  const getGoogleUser = createAsyncThunk(
     'users/getGoogleUser',
-    async (thunkApi) => {
+    async ({credentialId},thunkApi) => {
        try{
-       let data = await UserApi.googleGetUser()
-       console.log(data)
+       let data = await UserApi.getAccessToken(credentialId)
+   
     
     return  {user:""}
     
