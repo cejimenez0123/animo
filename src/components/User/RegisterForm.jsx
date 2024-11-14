@@ -2,7 +2,7 @@ import { useState,useContext, useEffect } from "react"
 import Context from "../../context"
 import UserApi from "../../data/api/UserApi"
 import { useDispatch } from "react-redux"
-import getGoogleUser from "../../actions/user/getGoogleUser"
+import googleSignUp from "../../actions/user/googleSignUp"
 
 export default function RegisterForm ({takeAStep}){
     const dispatch = useDispatch()
@@ -25,12 +25,13 @@ export default function RegisterForm ({takeAStep}){
       useEffect(() => {
 
         window.onGoogleSuccess = (response) => {
-      
-         UserApi.registerGoogle(response).then(token=>
+          localStorage.setItem("creds",JSON.stringify(response))
+          dispatch(googleSignUp(response))
+        //  UserApi.registerGoogle(response).then(token=>
           
-          {
+        //   {
           
-        })
+        // })
       }
         // Inject the google provided script 
         // (an importable module would be nicer here)

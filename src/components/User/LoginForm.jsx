@@ -3,9 +3,12 @@ import Context from "../../context"
 import UserApi from "../../data/api/UserApi"
 import { useNavigate } from "react-router"
 import Paths from "../../core/Paths"
+import googleLogin from "../../actions/user/googleLogIn"
+import { useDispatch } from "react-redux"
 
 export default function LogInForm ({takeAStep}){
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
     const [error,setError]=useState(false)
@@ -25,9 +28,11 @@ export default function LogInForm ({takeAStep}){
               // UserApi.getAccessToken(response).then(res=>{
               //   console.log(res)
               // })
-              UserApi.loginGoogle(response).then(res=>{
-                console.log(res)
-              })
+              localStorage.setItem("creds",JSON.stringify(response))
+              dispatch(googleLogin(response))
+              // UserApi.loginGoogle(response).then(res=>{
+              //   console.log(res)
+              // })
         
           }
             // const idToken = 

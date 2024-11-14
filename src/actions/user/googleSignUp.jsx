@@ -3,17 +3,14 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 
 const googleSignUp = createAsyncThunk(
     'users/googleSignUp',
-    async ({email,password},thunkApi) => {
+    async (response,thunkApi) => {
        try{
     
    
       
-        
-    //    let data = await UserApi.logIn({email,password})
-    //     const {token,user}=data
-    //           localStorage.setItem("token",token)
-    
-    // return  {user:user}
+  let data = await UserApi.registerGoogle(response)
+console.log("sign up",JSON.stringify(data))
+  return {user:data.user}
     
 }catch (error) {
     return{

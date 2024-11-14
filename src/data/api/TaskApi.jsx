@@ -5,6 +5,7 @@ class TaskApi{
 
     url=Enviroment.path
     token = "token"
+    googlePath = (clientId,credential)=>`/${clientId}/${credential}`
     async getEnergyTask(){
         let res = await axios.get(this.url+"/task/energy")
         return res.data
@@ -124,6 +125,16 @@ return res.data
 }
        
      
+    }
+    async getGoogleCalendar(){
+        let creds = JSON.parse(localStorage.getItem("creds"))
+        let res = await axios.get(this.url+this.googlePath(creds.clientId,creds.credential)+"/calender")
+        return res.data
+    }
+    async getGoogleTasks(){
+        let creds = JSON.parse(localStorage.getItem("creds"))
+        let res = await axios.get(this.url+this.googlePath(creds.clientId,creds.credential)+"/task")
+        return res.data
     }
     async postBreakdown({id}){
         let token = localStorage.getItem(this.token)

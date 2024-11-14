@@ -53,9 +53,10 @@ class UserApi{
           .replace(/\//g, '_')
           .replace(/=+$/, '');
       }
-      async loginGoogle(creds){
+      async authGoogle(creds){
         let res = await axios.post(this.url+"/user/auth/google",{creds:creds})
-    return res.data
+        console.log(res)
+        return res.data
       }
       async registerGoogle(creds){
         let res = await axios.post(this.url+"/user/register/google",{
