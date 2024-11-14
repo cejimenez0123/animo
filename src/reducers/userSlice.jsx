@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import logIn from "../actions/user/login"
 import getCurrentUser from "../actions/user/getCurrentUser"
 import googleLogin from "../actions/user/googleLogIn"
+import googleSignUp from "../actions/user/googleSignUp"
 
 const initialState = {
     user: null,
@@ -44,8 +45,16 @@ const userSlice = createSlice({
         }).addCase(googleLogin.rejected,(state,{payload})=>{
             state.error=payload.error
             state.loading=false
-        })
-
+        }).addCase(googleSignUp.fulfilled,(state,{payload})=>{
+            state.user=payload.user
+            state.error =null
+            state.loading=false
+        }).addCase(googleSignUp.rejected,(state,{payload})=>{
+            state.error=payload.error
+            state.loading=false
+        }).addCase(googleSignUp.pending,(state)=>{
+            state.loading=true
+            state.error=null})
 }})
 
 

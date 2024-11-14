@@ -9,7 +9,7 @@ const googleSignUp = createAsyncThunk(
    
       
   let data = await UserApi.registerGoogle(response)
-console.log("sign up",JSON.stringify(data))
+
   return {user:data.user}
     
 }catch (error) {
