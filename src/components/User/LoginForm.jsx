@@ -4,7 +4,7 @@ import UserApi from "../../data/api/UserApi"
 import { useNavigate } from "react-router"
 import Paths from "../../core/Paths"
 import googleLogin from "../../actions/user/googleLogIn"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 export default function LogInForm ({takeAStep}){
     const navigate = useNavigate()
@@ -12,7 +12,12 @@ export default function LogInForm ({takeAStep}){
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
     const [error,setError]=useState(false)
-    const {user,setUser}=useContext(Context)
+    const user = useSelector(state=>state.user.user)
+    useEffect(()=>{
+      if(user){
+        navigate("/")
+      }
+    },[user])
     const handleChangeEmail = (e)=>{
       setError(false)
         setEmail(e.target.value)
@@ -66,7 +71,7 @@ export default function LogInForm ({takeAStep}){
           const {token,user}=data
           if(token){
           localStorage.setItem("token",token)
-          setUser(user)
+       
           setError(false)
           navigate(Paths.home())
           }else{

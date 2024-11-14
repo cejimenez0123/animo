@@ -1,17 +1,23 @@
 import { useState,useContext, useEffect } from "react"
 import Context from "../../context"
 import UserApi from "../../data/api/UserApi"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import googleSignUp from "../../actions/user/googleSignUp"
+import { useNavigate } from "react-router-dom"
 
 export default function RegisterForm ({takeAStep}){
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
     const [confirmPassword,setConfirmPassword]=useState("")
-    const {user,setUser}=useContext(Context)
+    const user = useSelector(state=>state.user.user)
     const {googleBtn,setGoogleBtn}=useState(null)
-   
+    useEffect(()=>{
+      if(user){
+        navigate("/")
+      }
+    },[user])
     const handleChangeEmail = (e)=>{
         setEmail(e.target.value)
       }
